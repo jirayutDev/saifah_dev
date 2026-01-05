@@ -4,10 +4,10 @@
     @csrf
     
     <div>
-        <label class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" name="email" value="{{ old('email') }}" 
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" name="username" value="{{ old('username') }}" 
                class="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
-        @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
     </div>
 
     <div x-data="{ show: false }">

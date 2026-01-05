@@ -30,11 +30,12 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'gender' => 'required|string|max:50',
+            'username' => 'required|string|max:255|unique:users,username'
         ]);
 
         $existingUser = User::where('email', $validated['email'])->first();
         if ($existingUser) {
-            return back()->withErrors(['email' => 'อีเมลนี้ถูกใช้งานแล้ว'])->withInput();
+            return back()->withErrors(['email' => 'This email is already in use.'])->withInput();
         }
 
         $user = new User();
@@ -44,21 +45,21 @@ class AuthController extends Controller
         $user->display_name = $validated['display_name'];
         $user->first_name = $validated['first_name'];
         $user->last_name = $validated['last_name'];
-        $user->display_name = $validated['display_name'];
         $user->gender = $validated['gender'];
         $user->birth_date = $validated['birth_date'];
         $user->name = $validated['first_name'] . ' ' . $validated['last_name'];
+        $user->username = $validated['username'];
         $user->save();
 
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'ยินดีต้อนรับ! สมัครสมาชิกสำเร็จ');
+        return redirect()->route('dashboard')->with('success', 'Welcome! Registration successful.');
     }
 
     public function signIn(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|string|max:255',
             'password' => 'required',
         ]);
 
@@ -74,8 +75,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'username' => 'The provided credentials do not match our records.',
+        ])->onlyInput('username');
     }
 
     public function logout(Request $request)
